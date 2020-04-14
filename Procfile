@@ -1,1 +1,1 @@
-web: ./a.out inp.c
+web: ./a.out inp.c $PORT
