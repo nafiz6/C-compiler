@@ -1,1 +1,20 @@
-{ "name": "appname", "version": "0.0.1", "dependencies": {} }
+{
+  "name": "c-compiler",
+  "version": "0.0.1",
+  "dependencies": {},
+  "description": "Takes a C file as input and parses it to assembly code (EMU-8086)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nafiz6/C-compiler.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nafiz6/C-compiler/issues"
+  },
+  "homepage": "https://github.com/nafiz6/C-compiler#readme"
+}
