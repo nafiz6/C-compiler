@@ -5,16 +5,41 @@ var fs = require("fs");
 const { exec } = require("child_process");
 var http = require('http');
 
-app.listen(80, () =>{
+app.get('/', (req,res) =>{
 
 
 
-    res.write("HELLOW");
-    res.write("\n");	
+    exec("./a.out inp.c", (error, stdout, stderr) => {
+
+  try{  const contents = fs.readFileSync('code.asm', 'UTF-8');
+    if (error) {
+        console.log(`error: ${error.message}`);
+        return;
+    }
+    if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        return;
+    }
+
+	const lines = contents.split(/\r?\n/);
 
 
 
 
 
 
+
+
+    res.status(200).send(contents);
+
+} catch(err){
+console.log(err)
+}});
 });
+
+
+
+
+app.listen(process.env.PORT || 8000, () => console.log('webhook is listening'));
+
+
