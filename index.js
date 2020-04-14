@@ -1,9 +1,11 @@
+var express = require("express");
+var app = express();
 var fs = require("fs");
 
 const { exec } = require("child_process");
 var http = require('http');
 
-http.createServer(function (req, res) {
+app.listen(80, () =>{
 
 
 
@@ -15,4 +17,4 @@ http.createServer(function (req, res) {
 
 
 
-}).listen(8080);
+});
