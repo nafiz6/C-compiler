@@ -50,19 +50,30 @@ app.post('/', (req,res) =>{
 	});
 
 
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+	let errval ={code: "",
+		log: "compilation failed. please recheck code"
+	}
+
 	exec("./a.out inp.c", (error, stdout, stderr) => {
-	console.log("Executed");
-	try{
-		const contents = fs.readFileSync('code.asm', 'UTF-8');
-		const logs = fs.readFileSync('log.txt', 'UTF-8');
 		if (error) {
 			console.log(`error: ${error.message}`);
+			errVal.log = errVal.log.concat(error.message);
+			res.status(200).send(JSON.stringify(errVal));
 			return;
 		}
 		if (stderr) {
 			console.log(`stderr: ${stderr}`);
+			errVal.log = errVal.log.concat(stderr);
+			res.status(200).send(JSON.stringify(errVal));
 			return;
 		}
+		console.log("Executed");
+		try{
+		const contents = fs.readFileSync('code.asm', 'UTF-8');
+		const logs = fs.readFileSync('log.txt', 'UTF-8');
 		
 		const lines = contents.split(/\r?\n/);
 		let sendVal={
@@ -70,11 +81,11 @@ app.post('/', (req,res) =>{
 			log: logs
 		};
 		console.log(sendVal);
-		res.header("Access-Control-Allow-Origin", "*");
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 		res.status(200).send(JSON.stringify(sendVal));
 
 	} catch(err){
+		errVal.log = errVal.log.concat(err);
+		res.status(200).send(JSON.stringify(errVal);
 		console.log(err)
 	}});
 });
