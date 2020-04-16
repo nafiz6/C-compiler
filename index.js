@@ -8,7 +8,11 @@ const { exec } = require("child_process");
 
 app.listen(process.env.PORT || 8000, () => console.log('webhook is listening'));
 
-
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.get('/last-file', (req,res) =>{
 	exec("./a.out inp.c", (error, stdout, stderr) => {
@@ -44,6 +48,7 @@ app.post('/', (req,res) =>{
 		console.log('Saved!');
 	});
 
+
 	exec("./a.out inp.c", (error, stdout, stderr) => {
 
 	try{
@@ -60,6 +65,8 @@ app.post('/', (req,res) =>{
 		const lines = contents.split(/\r?\n/);
 		let sendVal={};
 		sendVal.code=contents;
+		res.header("Access-Control-Allow-Origin", "*");
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 		res.status(200).send(sendVal);
 
 	} catch(err){
