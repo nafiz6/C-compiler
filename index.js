@@ -63,8 +63,9 @@ app.post('/', (req,res) =>{
 		}
 
 		const lines = contents.split(/\r?\n/);
-		let sendVal={};
-		sendVal.code=contents;
+		let sendVal={
+			code:contents
+		};
 		res.header("Access-Control-Allow-Origin", "*");
 		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 		res.status(200).send(sendVal);
