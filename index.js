@@ -29,9 +29,10 @@ app.get('/last-file', (req,res) =>{
 		}
 
 		const lines = contents.split(/\r?\n/); 
+		console.log(contents);
+		res.json(contents);
 
-
-		res.status(200).send(JSON.stringify(contents));
+//		res.status(200).send(JSON.stringify(contents));
 
 	} catch(err){
 		console.log(err)
