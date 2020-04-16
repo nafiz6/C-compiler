@@ -54,13 +54,13 @@ app.post('/', (req,res) =>{
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
 	let errVal ={code: "",
-		log: "compilation failed. please recheck code"
+		log: "Compilation failed. Please recheck code\n"
 	}
 
 	exec("./a.out inp.c", (error, stdout, stderr) => {
 		if (error) {
 			console.log(`error: ${error.message}`);
-			errVal.log = errVal.log.concat(error.message);
+			errVal.log = errVal.log.concat(error.message).concat("\n");
 			res.status(200).send(JSON.stringify(errVal));
 			return;
 		}
