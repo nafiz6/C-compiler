@@ -31,7 +31,7 @@ app.get('/last-file', (req,res) =>{
 		const lines = contents.split(/\r?\n/); 
 
 
-		res.status(200).send(contents);
+		res.status(200).send(JSON.stringify(contents));
 
 	} catch(err){
 		console.log(err)
@@ -68,7 +68,7 @@ app.post('/', (req,res) =>{
 		};
 		res.header("Access-Control-Allow-Origin", "*");
 		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		res.status(200).send(sendVal);
+		res.status(200).send(JSON.stringify(sendVal));
 
 	} catch(err){
 		console.log(err)
