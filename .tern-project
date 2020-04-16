@@ -1,0 +1,18 @@
+{
+    "plugins": {
+        "es_modules": {},
+        "node": {}
+    },
+    "libs": [
+        "ecma5",
+        "ecma6",
+        "ecma7"
+    ],
+    "ecmaVersion": 7,
+    "loadEagerly": [
+        "./*.js"
+    ],
+    "dontLoad": [
+        "node_modules/**"
+    ]
+}
