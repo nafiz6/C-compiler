@@ -1,5 +1,3 @@
 
- Total Lines: 23
+Error at line no 1: syntax error
 
-
-Total Errors: 0

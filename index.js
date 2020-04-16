@@ -51,7 +51,7 @@ app.post('/', (req,res) =>{
 
 
 	exec("./a.out inp.c", (error, stdout, stderr) => {
-
+	console.log("Executed");
 	try{
 		const contents = fs.readFileSync('code.asm', 'UTF-8');
 		if (error) {
@@ -62,11 +62,12 @@ app.post('/', (req,res) =>{
 			console.log(`stderr: ${stderr}`);
 			return;
 		}
-
+		
 		const lines = contents.split(/\r?\n/);
 		let sendVal={
 			code:contents
 		};
+		console.log(sendVal);
 		res.header("Access-Control-Allow-Origin", "*");
 		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 		res.status(200).send(JSON.stringify(sendVal));
