@@ -55,8 +55,6 @@ app.post('/', (req,res) =>{
 	try{
 		const contents = fs.readFileSync('code.asm', 'UTF-8');
 		const logs = fs.readFileSync('log.txt', 'UTF-8');
-		const inp = fs.readFileSync('inp.c','UTF-8');
-		console.log(inp);
 		if (error) {
 			console.log(`error: ${error.message}`);
 			return;
