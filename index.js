@@ -85,7 +85,7 @@ app.post('/', (req,res) =>{
 
 	} catch(err){
 		errVal.log = errVal.log.concat(err);
-		res.status(200).send(JSON.stringify(errVal);
+		res.status(200).send(JSON.stringify(errVal));
 		console.log(err)
 	}});
 });
