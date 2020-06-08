@@ -6,7 +6,7 @@ The [compiler directory](../../tree/master/compiler/) has the code for the proje
 [a.out](../master/a.out) is the compiled binary file. To enter a custom .c file, simply run `a.out input.c`. 
 A log.txt file is generated which will contain any details of errors.
 
-Not all C functionalities are implemented in this compiler. This is just a basic represantion of how a general compiler may work.
+The grammer can be found [here](../master/Grammar.pdf).Not all C functionalities are implemented in this compiler. This is just a basic represantion of how a general compiler may work.
 
 
 You can also test the compiler online at [nafiz6.github.io/c-to-assembly](https://nafiz6.github.io/c-to-assembly.html)
