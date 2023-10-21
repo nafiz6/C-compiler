@@ -4,7 +4,7 @@ const express = require("express"),
 	fs = require("fs");
 
 const { exec } = require("child_process");
-
+const https = require('https');
 
 app.listen(process.env.PORT || 8000, () => console.log('webhook is listening'));
 
@@ -51,7 +51,7 @@ app.get('/api/last-file', (req,res) =>{
 
 
 
-app.post('/api/', (req,res) =>{
+app.post('/api/', (req,res) => {
 	let body = req.body;
 	console.log(req.body);
 	fs.writeFile('/tmp/inp.c', body.code ,function (err) {
@@ -67,50 +67,55 @@ app.post('/api/', (req,res) =>{
 	let errVal ={code: "",
 		log: "Compilation failed. Please recheck code\n"
 	}
-	
-	exec("cd /tmp && wget https://c-compiler-git-master-nafiz6.vercel.app/a.out", (e,so,se) => {
-		exec("cd /tmp && ls", (e,so,se) =>{
-			console.log(e)
-			console.log(se)
-			console.log(so)
-		})
-		console.log(e)
-		console.log(se)
-		if (!e && !se){
-			console.log("Copied!")
-		}
-		exec("cd /tmp && /tmp/a.out /tmp/inp.c", (error, stdout, stderr) => {
-			if (error) {
-				console.log(`error: ${error.message}`);
-				errVal.log = errVal.log.concat(error.message).concat("\n");
-				res.status(200).send(JSON.stringify(errVal));
-				return;
-			}
-			if (stderr) {
-				console.log(`stderr: ${stderr}`);
-				errVal.log = errVal.log.concat(stderr);
-				res.status(200).send(JSON.stringify(errVal));
-				return;
-			}
-			console.log("Executed");
-			try{
-				const contents = fs.readFileSync('/tmp/code.asm', 'UTF-8');
-				const logs = fs.readFileSync('/tmp/log.txt', 'UTF-8');
-				
-				const lines = contents.split(/\r?\n/);
-				let sendVal={
-					code:contents,
-					log: logs
-				};
-				console.log(sendVal);
-				res.status(200).send(JSON.stringify(sendVal));
-	
-			} catch(err){
-				errVal.log = errVal.log.concat(err);
-				res.status(200).send(JSON.stringify(errVal));
-				console.log(err)
-		}});
+	const file = fs.createWriteStream("/tmp/a.out");
+	const request = https.get("https://c-compiler-git-master-nafiz6.vercel.app/a.out", function(response) {
+		response.pipe(file);
+
+		// after download completed close filestream
+		file.on("finish", async () => {
+			await file.close();
+			console.log("Download Completed");
+			
+			exec("cd /tmp && ls", (e,so,se) =>{
+				console.log(e)
+				console.log(se)
+				console.log(so)
+			})
+			exec("cd /tmp && /tmp/a.out /tmp/inp.c", (error, stdout, stderr) => {
+				if (error) {
+					console.log(`error: ${error.message}`);
+					errVal.log = errVal.log.concat(error.message).concat("\n");
+					res.status(200).send(JSON.stringify(errVal));
+					return;
+				}
+				if (stderr) {
+					console.log(`stderr: ${stderr}`);
+					errVal.log = errVal.log.concat(stderr);
+					res.status(200).send(JSON.stringify(errVal));
+					return;
+				}
+				console.log("Executed");
+				try{
+					const contents = fs.readFileSync('/tmp/code.asm', 'UTF-8');
+					const logs = fs.readFileSync('/tmp/log.txt', 'UTF-8');
+					
+					const lines = contents.split(/\r?\n/);
+					let sendVal={
+						code:contents,
+						log: logs
+					};
+					console.log(sendVal);
+					res.status(200).send(JSON.stringify(sendVal));
+		
+				} catch(err){
+					errVal.log = errVal.log.concat(err);
+					res.status(200).send(JSON.stringify(errVal));
+					console.log(err)
+			}});
+		});
 	});
+
+	
 
 	
 });
