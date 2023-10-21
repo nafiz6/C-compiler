@@ -81,7 +81,7 @@ app.post('/api/', (req,res) => {
 				console.log(se)
 				console.log(so)
 			})
-			exec("cd /tmp && /tmp/a.out /tmp/inp.c", (error, stdout, stderr) => {
+			exec("cd /tmp && chmod +x /tmp/a.out && /tmp/a.out /tmp/inp.c", (error, stdout, stderr) => {
 				if (error) {
 					console.log(`error: ${error.message}`);
 					errVal.log = errVal.log.concat(error.message).concat("\n");
