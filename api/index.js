@@ -67,45 +67,51 @@ app.post('/api/', (req,res) =>{
 	let errVal ={code: "",
 		log: "Compilation failed. Please recheck code\n"
 	}
+	exec("ls", (e,so,se) =>{
+		console.log(e)
+		console.log(se)
+		console.log(so)
+	})
 	exec("cp a.out /tmp/a.out", (e,so,se) => {
 		console.log(e)
 		console.log(se)
 		if (!e && !se){
 			console.log("Copied!")
 		}
+		exec("cd /tmp && /tmp/a.out /tmp/inp.c", (error, stdout, stderr) => {
+			if (error) {
+				console.log(`error: ${error.message}`);
+				errVal.log = errVal.log.concat(error.message).concat("\n");
+				res.status(200).send(JSON.stringify(errVal));
+				return;
+			}
+			if (stderr) {
+				console.log(`stderr: ${stderr}`);
+				errVal.log = errVal.log.concat(stderr);
+				res.status(200).send(JSON.stringify(errVal));
+				return;
+			}
+			console.log("Executed");
+			try{
+				const contents = fs.readFileSync('/tmp/code.asm', 'UTF-8');
+				const logs = fs.readFileSync('/tmp/log.txt', 'UTF-8');
+				
+				const lines = contents.split(/\r?\n/);
+				let sendVal={
+					code:contents,
+					log: logs
+				};
+				console.log(sendVal);
+				res.status(200).send(JSON.stringify(sendVal));
+	
+			} catch(err){
+				errVal.log = errVal.log.concat(err);
+				res.status(200).send(JSON.stringify(errVal));
+				console.log(err)
+		}});
 	});
 
-	exec("cd /tmp && /tmp/a.out /tmp/inp.c", (error, stdout, stderr) => {
-		if (error) {
-			console.log(`error: ${error.message}`);
-			errVal.log = errVal.log.concat(error.message).concat("\n");
-			res.status(200).send(JSON.stringify(errVal));
-			return;
-		}
-		if (stderr) {
-			console.log(`stderr: ${stderr}`);
-			errVal.log = errVal.log.concat(stderr);
-			res.status(200).send(JSON.stringify(errVal));
-			return;
-		}
-		console.log("Executed");
-		try{
-			const contents = fs.readFileSync('/tmp/code.asm', 'UTF-8');
-			const logs = fs.readFileSync('log.txt', 'UTF-8');
-			
-			const lines = contents.split(/\r?\n/);
-			let sendVal={
-				code:contents,
-				log: logs
-			};
-			console.log(sendVal);
-			res.status(200).send(JSON.stringify(sendVal));
-
-		} catch(err){
-			errVal.log = errVal.log.concat(err);
-			res.status(200).send(JSON.stringify(errVal));
-			console.log(err)
-	}});
+	
 });
 
 
