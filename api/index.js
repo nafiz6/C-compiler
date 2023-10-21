@@ -16,7 +16,7 @@ app.use(function(req, res, next) {
 
 app.get('/api/last-file', (req,res) =>{
 	res.header('Cache-Control', 's-max-age=1, stale-while-revalidate');
-	exec("cp ./public/a.out /tmp/a.out", (e,so,se) => {
+	exec("cd /tmp && curl c-compiler-git-master-nafiz6.vercel.app/a.out --output a.out", (e,so,se) => {
 		console.log(e)
 		console.log(se)
 		if (!e && !se){
@@ -67,12 +67,13 @@ app.post('/api/', (req,res) =>{
 	let errVal ={code: "",
 		log: "Compilation failed. Please recheck code\n"
 	}
-	exec("ls", (e,so,se) =>{
-		console.log(e)
-		console.log(se)
-		console.log(so)
-	})
-	exec("cp ./public/a.out /tmp/a.out", (e,so,se) => {
+	
+	exec("cd /tmp && curl https://c-compiler-git-master-nafiz6.vercel.app/a.out -o a.out", (e,so,se) => {
+		exec("cd /tmp && ls", (e,so,se) =>{
+			console.log(e)
+			console.log(se)
+			console.log(so)
+		})
 		console.log(e)
 		console.log(se)
 		if (!e && !se){
