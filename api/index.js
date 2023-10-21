@@ -14,7 +14,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/last-file', (req,res) =>{
+app.get('/api/last-file', (req,res) =>{
+	res.header('Cache-Control', 's-max-age=1, stale-while-revalidate');
 	exec("./a.out inp.c", (error, stdout, stderr) => {
 
 	try{
@@ -36,12 +37,13 @@ app.get('/last-file', (req,res) =>{
 
 	} catch(err){
 		console.log(err)
+		res.status(500)
 	}});
 });
 
 
 
-app.post('/', (req,res) =>{
+app.post('/api/', (req,res) =>{
 	let body = req.body;
 	console.log(req.body);
 	fs.writeFile('inp.c', body.code ,function (err) {
@@ -52,6 +54,7 @@ app.post('/', (req,res) =>{
 
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.header('Cache-Control', 's-max-age=1, stale-while-revalidate');
 
 	let errVal ={code: "",
 		log: "Compilation failed. Please recheck code\n"
