@@ -16,7 +16,7 @@ app.use(function(req, res, next) {
 
 app.get('/api/last-file', (req,res) =>{
 	res.header('Cache-Control', 's-max-age=1, stale-while-revalidate');
-	exec("cp a.out /tmp/a.out", (e,so,se) => {
+	exec("cp ./public/a.out /tmp/a.out", (e,so,se) => {
 		console.log(e)
 		console.log(se)
 		if (!e && !se){
@@ -72,7 +72,7 @@ app.post('/api/', (req,res) =>{
 		console.log(se)
 		console.log(so)
 	})
-	exec("cp a.out /tmp/a.out", (e,so,se) => {
+	exec("cp ./public/a.out /tmp/a.out", (e,so,se) => {
 		console.log(e)
 		console.log(se)
 		if (!e && !se){

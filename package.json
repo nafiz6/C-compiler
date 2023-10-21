@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/nafiz6/C-compiler/issues"
   },
-  "homepage": "https://github.com/nafiz6/C-compiler#readme"
+  "homepage": "https://github.com/nafiz6/C-compiler#readme",
+  "files": [
+    "./public/a.out"
+  ],
 }
