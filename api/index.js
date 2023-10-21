@@ -16,10 +16,18 @@ app.use(function(req, res, next) {
 
 app.get('/api/last-file', (req,res) =>{
 	res.header('Cache-Control', 's-max-age=1, stale-while-revalidate');
-	exec("./a.out inp.c", (error, stdout, stderr) => {
+	exec("cp a.out /tmp/a.out", (e,so,se) => {
+		console.log(e)
+		console.log(se)
+		if (!e && !se){
+			console.log("Copied!")
+		}
+	});
+
+	exec("cd /tmp && /tmp/a.out /tmp/inp.c", (error, stdout, stderr) => {
 
 	try{
-		const contents = fs.readFileSync('code.asm', 'UTF-8');
+		const contents = fs.readFileSync('/tmp/code.asm', 'UTF-8');
 		if (error) {
 			console.log(`error: ${error.message}`);
 			return;
@@ -46,7 +54,7 @@ app.get('/api/last-file', (req,res) =>{
 app.post('/api/', (req,res) =>{
 	let body = req.body;
 	console.log(req.body);
-	fs.writeFile('inp.c', body.code ,function (err) {
+	fs.writeFile('/tmp/inp.c', body.code ,function (err) {
 		if (err) throw err;
 		console.log('Saved!');
 	});
@@ -59,8 +67,15 @@ app.post('/api/', (req,res) =>{
 	let errVal ={code: "",
 		log: "Compilation failed. Please recheck code\n"
 	}
+	exec("cp a.out /tmp/a.out", (e,so,se) => {
+		console.log(e)
+		console.log(se)
+		if (!e && !se){
+			console.log("Copied!")
+		}
+	});
 
-	exec("./a.out inp.c", (error, stdout, stderr) => {
+	exec("cd /tmp && /tmp/a.out /tmp/inp.c", (error, stdout, stderr) => {
 		if (error) {
 			console.log(`error: ${error.message}`);
 			errVal.log = errVal.log.concat(error.message).concat("\n");
@@ -75,21 +90,21 @@ app.post('/api/', (req,res) =>{
 		}
 		console.log("Executed");
 		try{
-		const contents = fs.readFileSync('code.asm', 'UTF-8');
-		const logs = fs.readFileSync('log.txt', 'UTF-8');
-		
-		const lines = contents.split(/\r?\n/);
-		let sendVal={
-			code:contents,
-			log: logs
-		};
-		console.log(sendVal);
-		res.status(200).send(JSON.stringify(sendVal));
+			const contents = fs.readFileSync('/tmp/code.asm', 'UTF-8');
+			const logs = fs.readFileSync('log.txt', 'UTF-8');
+			
+			const lines = contents.split(/\r?\n/);
+			let sendVal={
+				code:contents,
+				log: logs
+			};
+			console.log(sendVal);
+			res.status(200).send(JSON.stringify(sendVal));
 
-	} catch(err){
-		errVal.log = errVal.log.concat(err);
-		res.status(200).send(JSON.stringify(errVal));
-		console.log(err)
+		} catch(err){
+			errVal.log = errVal.log.concat(err);
+			res.status(200).send(JSON.stringify(errVal));
+			console.log(err)
 	}});
 });
 
