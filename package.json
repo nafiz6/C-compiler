@@ -2,7 +2,7 @@
   "name": "c-compiler",
   "version": "0.0.1",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.18.2"
   },
   "description": "Takes a C file as input and parses it to assembly code (EMU-8086)",
   "main": "index.js",
