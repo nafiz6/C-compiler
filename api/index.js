@@ -68,7 +68,7 @@ app.post('/api/', (req,res) =>{
 		log: "Compilation failed. Please recheck code\n"
 	}
 	
-	exec("cd /tmp && curl https://c-compiler-git-master-nafiz6.vercel.app/a.out -o a.out", (e,so,se) => {
+	exec("cd /tmp && wget https://c-compiler-git-master-nafiz6.vercel.app/a.out", (e,so,se) => {
 		exec("cd /tmp && ls", (e,so,se) =>{
 			console.log(e)
 			console.log(se)
